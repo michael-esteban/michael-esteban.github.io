@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<style>
+* {
+    font-family: Georgia;
+  }
+h1 {
+  font-size: 40px;
+}
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.main-article {
+    margin: 50px;
+    padding: 5px;
+}
+</style>
+</head>
+<body>
+
+<article class="main-article">
+<h1>Following The Numbers</h1>
+<p style="font-size:25px">A closer look on why statistics sometimes don't get it right.</p>
+
+<hr>
+
+<p>In the news, in your books and on your phone; statistics are everywhere. Someone famously said "number's don't lie", but nobody's sure who since their name wasn't a number.</p>
+<p>But in our world of alternative facts and random figures, the numbers behind our lives are more and more being called into question. We'll take a case study of why numbers don't always always tell the truth, and what can we do to prevent it.</p>
+
+<div id = "monty hall">
+<h2>Case 1: Monty Hall</h2>
+<p>Let's start with a pretty well-known one, called the Monty Hall problem. Suppose you were on a game show, with the grand prize of, say, <i>"a luxury automobile!"</i>. All you have to do is choose one of three doors.</p>
+<p>Behind one? The car of your dreams.</p>
+<p>Behind the others? Goats taken from the nearby farm.</p>
+<br>
+<p>Your gracious host tells you to choose...</p>
+<div id = "game1">
+<img src="assets/doorclosed.png" style="width:15vw;height:55vh" onmouseover="mOver(this)" onmouseout="mOut(this)" onclick="mClick(this)" id = "door1">
+<img src="assets/doorclosed.png" style="width:15vw;height:55vh" onmouseover="mOver(this)" onmouseout="mOut(this)" onclick="mClick(this)" id = "door2">
+<img src="assets/doorclosed.png" style="width:15vw;height:55vh" onmouseover="mOver(this)" onmouseout="mOut(this)" onclick="mClick(this)" id = "door3">
+</div>
+
+<div class="content" id="monty1Finished">
+    <p>But, before they reveal what's behind your door, they open one of the other two, revealing one of the goats. Your host then gives you the offer: <i>"Do you want to stay with the door you've chosen, or would you like to switch?"</i></p>
+    <p>The question we're interested in today however, is:</p>
+    <h3>Which has better odds?</h3>
+    <br>
+    <span>
+    <div style="background-color:#f92525;width:140px;height:40px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="changeColour(this, !stayOrSwitch)" onmouseout="resetColour(this)" onclick="switchWrapper('switchResponse')">Switch</div>
+    <div style="background-color:#f92525;width:140px;height:40px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="changeColour(this, !stayOrSwitch)" onmouseout="resetColour(this)" onclick="switchWrapper('stayResponse')">Stay</div>
+    <div style="background-color:#f92525;width:140px;height:40px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="changeColour(this, !stayOrSwitch)" onmouseout="resetColour(this)" onclick="switchWrapper('stayResponse')">Neither</div>
+    </span>
+</div>
+
+<script>
+    let stayOrSwitch = false;
+    let doorOpen = -1;
+    const right = Math.floor(Math.random() * 3);
+    let game1DoorArray = [document.getElementById("door1"), document.getElementById("door2"), document.getElementById("door3")]
+    function mOver(obj) {
+        if (doorOpen === -1) {
+            obj.src = "assets/nonagoninfinity.png";
+        }
+    }
+    function mOut(obj) {
+        if (doorOpen === -1) {
+            obj.src = "assets/doorclosed.png";
+        }
+    }
+    function mClick(obj) {
+        if (doorOpen === -1) {
+            const myIndex = game1DoorArray.indexOf(obj);
+            if (myIndex === right) {
+                doorOpen = Math.floor(Math.random() * 2);
+                if (doorOpen >= myIndex) {
+                    doorOpen++;
+                }
+            } else {
+                for(var i =0; i < 3; i++) {
+                    if (i !== myIndex && i !== right) {
+                        doorOpen = i;
+                    }
+                }
+            }
+            game1DoorArray[doorOpen].src = "assets/ithim.png";
+            obj.src = "assets/doorclosed.png";
+        }
+        expand("monty1Finished");
+    }
+
+    function switchWrapper(id) {
+        if (stayOrSwitch) return;
+        stayOrSwitch = true;
+        expand(id);
+        expand("montyExplanation");
+    }
+
+    function expand(id) {
+        console.log(id);
+        var content = document.getElementById(id);
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
+</script>
+
+<div class="content" id="switchResponse">
+    <p>That's correct!</p>
+</div>
+
+<div class="content" id="stayResponse">
+    <p>Strangely enough, that's not the case.</p>
+</div>
+
+<div class="content" id="montyExplanation">
+    <p>Backed by computer simulations and modelling, players who choose to switch doors have twice the chance of winning the car than players who choose to stay with their original one. One explanation of this is that when you choose the first door, there is 1/3 chance the car lies behind your door, and 2/3 chance it lies behind one of the other doors.</p>
+    <p>We also know that the host will always open a door containing a goat, meaning that in the two in three chance where you choose the incorrect door, switching is certain to win. </p>
+    <!-- Include another image here? -->
+    <p>Likewise, in the one in three chance you already chose the correct door, staying is certain to win.</p>
+    <p>If you're having trouble wrapping your head around this, consider a variant with 9 doors, 8 goats and 1 car. If 8 goat doors were opened after you chose a door, wouldn't you have a better chance of switching to the other?</p>
+    <!-- Hovering is hard :( -->
+    <p>And now, back to your original choice. What will you choose, stay or switch?</p>
+    <div id = "don't stop me now">
+        <div id = "gameInf">
+            <img src="assets/doorclosed.png" style="width:15vw;height:55vh" onmouseover="montyInfOver(this)" onmouseout="montyInfOut(this)" onclick="montyInfClick(this)" id = "infDoor1">
+            <img src="assets/doorclosed.png" style="width:15vw;height:55vh" onmouseover="montyInfOver(this)" onmouseout="montyInfOut(this)" onclick="montyInfClick(this)" id = "infDoor2">
+            <img src="assets/doorclosed.png" style="width:15vw;height:55vh" onmouseover="montyInfOver(this)" onmouseout="montyInfOut(this)" onclick="montyInfClick(this)" id = "infDoor3">
+        </div>
+        <script>
+            let infDoorOpen = -1;
+            let infNumSwitches = 0;
+            let infNumStays = 0;
+            let infRight = Math.floor(Math.random() * 3);
+            let infFirstChoice = -1;
+            let infFinished = false;
+            let gameInfDoorArray = [document.getElementById("infDoor1"), document.getElementById("infDoor2"), document.getElementById("infDoor3")]
+            function montyInfOver(obj) {
+                if (infFinished) {
+        
+                } else if (infDoorOpen === -1 || infDoorOpen != gameInfDoorArray.indexOf(obj)) {
+                    obj.src = "assets/nonagoninfinity.png";
+                }
+            }
+            function montyInfOut(obj) {
+                if (infFinished) {
+                    
+                } else if (infDoorOpen === -1 || infDoorOpen != gameInfDoorArray.indexOf(obj)) {
+                    obj.src = "assets/doorclosed.png";
+                }
+            }
+            function montyInfClick(obj) {
+                if (infDoorOpen === -1) {
+                    infFirstChoice = gameInfDoorArray.indexOf(obj);
+                    if (infFirstChoice === infRight) {
+                        infDoorOpen = Math.floor(Math.random() * 2);
+                        if (infDoorOpen >= infFirstChoice) {
+                            infDoorOpen++;
+                        }
+                    } else {
+                        for(var i =0; i < 3; i++) {
+                            if (i !== infFirstChoice && i !== infRight) {
+                                infDoorOpen = i;
+                            }
+                        }
+                    }
+                    gameInfDoorArray[infDoorOpen].src = "assets/ithim.png";
+                } else if (!infFinished && infDoorOpen !== gameInfDoorArray.indexOf(obj)) {
+                    if (gameInfDoorArray.indexOf(obj) === infRight) {
+                    obj.src = "assets/cardor.png";
+                    } else {
+                    obj.src = "assets/ithim.png";
+                    }
+        
+                    if (infFirstChoice === infRight) {
+                    infNumStays++;
+                    document.getElementById("infNumStaysView").textContent = infNumStays;
+                    } else {
+                    infNumSwitches++;
+                    document.getElementById("infNumSwitchesView").textContent = infNumSwitches;
+                    }
+                    infFinished = true;
+                }
+            }
+        </script>
+        <div style="height:100px">
+        <p>Frequency of each solution:</p>
+        <li>
+            <span>Stays: </span>
+            <span id="infNumStaysView">0</span>
+            <span>  Switches: </span>
+            <span id="infNumSwitchesView">0</span>
+        </li>
+        <div style="background-color:#f92525;width:140px;height:40px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="changeColour(this)" onmouseout="resetColour(this)" onclick="montyReset(this)">Reset</div>
+        <p></p>
+        <script>
+        function montyReset(obj) {
+            infDoorOpen = -1;
+            infFinished = false;
+            infRight = Math.floor(Math.random() * 3);
+            for (var i = 0; i < gameInfDoorArray.length; i++) {
+            gameInfDoorArray[i].src = "assets/doorclosed.png";
+            }
+        }
+        function changeColour(obj, enabled = true) {
+            if (!enabled) return;
+            obj.style.backgroundColor = "#c92525"; 
+            obj.style.color = "#e9e9e9";
+        }
+        function resetColour(obj) {
+            obj.style.backgroundColor = "#f92525";
+            obj.style.color = "#ffffff";
+        }
+        </script>
+        </div>
+        </div>
+        <br>
+        <p>This was first noted in <i>The American Statistician</i> in 1975, and is a good example of how our assumptions can sway the way we view number problems. Our assumptions aren't the only thing to worry about though...</p>
+    </div>
+</div>
+
+
+    
+
+
+<div id = "plane game">
+    <h2>Case 2: Flying High</h2>
+    <div>
+        <p>Let's go a bit further back in time for our next example. Meet Abraham Wald, a statistician with the task of improving the design of fighter jets during the Second World War. To do this, he was given free reign over a hanger of 10, analysing the damage before they got repaired and deciding where to upgrade reinforcements. This was essential work, as redundant reinforcements could be even more dangerous as extra load.</p>
+        <p>His goal, and your goal today, is to find a combination of reinforcements that reduces casualties. After each flight, you decide on one area across the fleet to reinforce. Aim to keep at least one plane after 7 flights.</p>
+        <span id="greyRectangle0">Click on the grey rectangle to start.</span>
+        <span id="greyRectangle1"></span>
+        <span id="greyRectangle2"></span>
+    </div>
+
+    <div>
+        <canvas id="Canvas" onclick="drawImage() "></canvas>
+        <div style="width:100%;height:80px;">
+            <span>
+                <div style="background-color:#f92525;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="upgradeChangeColour(this)" onmouseout="upgradeResetColour(this)" onclick="upgrade('lwing')">Upgrade Left Wing</div>
+                <div style="background-color:#f92525;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="upgradeChangeColour(this)" onmouseout="upgradeResetColour(this)" onclick="upgrade('rwing')">Upgrade Right Wing</div>
+                <div style="background-color:#f92525;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="upgradeChangeColour(this)" onmouseout="upgradeResetColour(this)" onclick="upgrade('fuselage')">Upgrade Fuselage</div>
+                <div style="background-color:#f92525;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="upgradeChangeColour(this)" onmouseout="upgradeResetColour(this)" onclick="upgrade('cockpit')">Upgrade Cockpit</div>
+                <div style="background-color:#f92525;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="upgradeChangeColour(this)" onmouseout="upgradeResetColour(this)" onclick="upgrade('rear')">Upgrade Rear</div>
+                <div style="background-color:#f92525;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="upgradeChangeColour(this)" onmouseout="upgradeResetColour(this)" onclick="upgrade('rudder')">Upgrade Rudder</div>
+                <div style="background-color:#25f953;width:140px;height:50px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="flyChangeColour(this)" onmouseout="flyResetColour(this)" onclick="flyPress(init)">Take Off</div>
+            </span>
+        </div>
+        <script>
+            var canvas;
+            var context;
+            var paintButton;
+            var init = false;
+            var upgradeable = false;
+            var flying = false;
+            var flightNum = 1;
+            var flightGameOver = false;
+        
+            var colors = [[37, 145, 195], // rwing
+                [36, 144, 194], // lwing
+                [36, 145, 195], // fuselage
+                [36, 145, 194], // cockpit
+                [37, 146, 195], // rear
+                [37, 146, 196]] // rudder
+        
+            var planeArray = [];
+            for (var i = 0; i < 10; i++) {
+                var temp = new Image();
+                temp.src = "assets/ayyplane.png";
+                if (i < 5) {
+                    temp.xPos = 10 + i * 200;
+                    temp.yPos = 10 + i * 25;
+                } else {
+                    temp.xPos = 110 + (i - 5) * 200;
+                    temp.yPos = 260 + (i - 5) * 25;
+                }
+                planeArray.push(temp);
+            }
+            paintButton = document.getElementById('PaintButton');
+            canvas = document.getElementById('Canvas');
+            canvas.height = 540;
+            canvas.width = 1120;
+            canvas.setAttribute('style','background-color:grey');
+            context = canvas.getContext('2d');
+        
+            let rWingDef = 0;
+            let lWingDef = 0;
+            let fuselageDef = 0;
+            let cockpitDef = 0;
+            let rearDef = 0;
+            let rudderDef = 0;
+        
+            let ghost0 = 10;
+            let ghost9 = 360;
+            let vel = 0;
+        
+        
+            function upgradeChangeColour(obj) {
+                if (!upgradeable || flightGameOver) return;
+                obj.style.backgroundColor = "#c92525"; 
+                obj.style.color = "#e9e9e9";
+            }
+            function upgradeResetColour(obj) {
+                obj.style.backgroundColor = "#f92525";
+                obj.style.color = "#ffffff";
+            }
+        
+            function flyChangeColour(obj) {
+                if (!init || flying || upgradeable || flightGameOver) return;
+                obj.style.backgroundColor = "#25c93b"; 
+                obj.style.color = "#e9e9e9";
+            }
+            function flyResetColour(obj) {
+                obj.style.backgroundColor = "#25f953";
+                obj.style.color = "#ffffff";
+            }
+        
+            function drawImage() {
+                if (init) return;
+                for (var i = 0; i < planeArray.length; i++) {
+                    context.drawImage(planeArray[i], planeArray[i].xPos, planeArray[i].yPos, 194, 170);
+                }
+                init = true;
+                document.getElementById("greyRectangle0").innerHTML = "Flight ";
+                document.getElementById("greyRectangle2").innerHTML = "of 7.";
+                flyPress();
+            }
+        
+            function changeToWhite(data, plane) {
+                var areas = [plane.rWingDam, plane.lWingDam, plane.fuselageDam, plane.cockpitDam, plane.rearDam, plane.rudderDam];
+                for (var i = 0; i < data.length; i+= 4) {
+                    for (var j = 0; j < colors.length; j++) {
+                        if (data[i] === colors[j][0] &&
+                        data[i+1] === colors[j][1] &&
+                        data[i+2] === colors[j][2]) {
+                            data[i] += 10 * areas[j];
+                            data[i+1] -= 7 * areas[j];
+                            data[i+2] -= 9 * areas[j];
+                        }
+                    }
+                }
+            }
+        
+            function miniOnClick(plane) {
+                var imageData = context.getImageData(plane.xPos, plane.yPos, 194, 170);
+                
+                changeToWhite(imageData.data, plane);
+        
+                // Update the canvas with the new data
+                context.putImageData(imageData, plane.xPos, plane.yPos);
+            }
+        
+            function flyPress(bool = true) {
+                if (flying || !bool || flightGameOver) return;
+                flying = true;
+                document.getElementById("greyRectangle1").innerHTML = flightNum;
+                flightNum++;
+                for (var i = 0; i < planeArray.length; i++) {
+                    if (planeArray[i] === null) continue;
+                    planeArray[i].rWingDam = 0;
+                    planeArray[i].lWingDam = 0;
+                    planeArray[i].fuselageDam = 0;
+                    planeArray[i].cockpitDam = 0;
+                    planeArray[i].rearDam = 0;
+                    planeArray[i].rudderDam = 0;
+                }
+                flyOff();
+            }
+        
+            function flyOff() { 
+                context.clearRect(0, 0, canvas.width, canvas.height);
+        
+                for (var i = 0; i < planeArray.length; i++) {
+                    if (planeArray[i] === null) continue;
+                    planeArray[i].yPos-= vel;
+                    planeArray[i].style.top = planeArray[i].yPos + "px";
+                    context.drawImage(planeArray[i], planeArray[i].xPos, planeArray[i].yPos, 194, 170);
+                }
+        
+                ghost0 -= vel;
+                ghost9 -= vel;
+        
+                vel += 0.9;
+        
+                if (ghost9 > -1000) {
+                    requestAnimationFrame(flyOff);
+                } else {
+                    damageControl();
+                    flyBack();
+                }
+            }
+        
+            function damageControl() {
+                for (var i = 0; i < planeArray.length; i++) {
+                    if (planeArray[i] === null) continue;
+                    let thisPlane = planeArray[i];
+                    // right wing (37, 145, 195)
+                    if (Math.random() > 0.2) {
+                        var baseDamage = 19.5 - 3 * rWingDef;
+                        thisPlane.rWingDam = Math.random() * baseDamage;
+                        if (thisPlane.rWingDam > 19) {
+                            console.log("Plane " + i + " got destroyed from a rwing shot!");
+                            planeArray[i] = null;
+                            continue;
+                        }
+                    }
+                    // left wing (36, 144, 194)
+                    if (Math.random() > 0.35) {
+                        var baseDamage = 20 - 3 * lWingDef;
+                        thisPlane.lWingDam = Math.random() * baseDamage;
+                        if (thisPlane.lWingDam > 19) {
+                            console.log("Plane " + i + " got destroyed from a lwing shot!");
+                            planeArray[i] = null;
+                            continue;
+                        }
+                    }
+                    // fuselage (36, 145, 195)
+                    if (Math.random() > 0.75) {
+                        var baseDamage = 5 - fuselageDef;
+                        thisPlane.fuselageDam = (19 - 2 * fuselageDef) + Math.random() * baseDamage;
+                        if (thisPlane.fuselageDam > 19) {
+                            console.log("Plane " + i + " got destroyed from a fuselage shot!");
+                            planeArray[i] = null;
+                            continue;
+                        }
+                    }
+                    // cockpit (36, 145, 194)
+                    if (Math.random() > 0.40) {
+                        var baseDamage = 21 - cockpitDef;
+                        thisPlane.cockpitDam = Math.random() * baseDamage;
+                        if (thisPlane.cockpitDam > 19) {
+                            console.log("Plane " + i + " got destroyed from a cockpit shot!");
+                            planeArray[i] = null;
+                            continue;
+                        }
+                    }
+                    // rear (36, 145, 194)
+                    if (Math.random() > 0.50) {
+                        var baseDamage = 5 - rearDef;
+                        thisPlane.rearDam = Math.random() * baseDamage;
+                        if (thisPlane.rearDam > 19) {
+                            console.log("Plane " + i + " got destroyed from a rear shot! How?");
+                            planeArray[i] = null;
+                            continue;
+                        }
+                    }
+                    // rudder (37, 146, 196)
+                    if (Math.random() > 0.45) {
+                        var baseDamage = 21 - rudderDef;
+                        thisPlane.rudderDam = Math.random() * baseDamage;
+                        if (thisPlane.rudderDam > 19) {
+                            console.log("Plane " + i + " got destroyed from a rudder shot!");
+                            planeArray[i] = null;
+                            continue;
+                        }
+                    }
+                    
+                }
+        
+            }
+        
+            function flyBack() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+        
+                for (var i = 0; i < planeArray.length; i++) {
+                    if (planeArray[i] === null) continue;
+                    planeArray[i].yPos+= vel;
+                    planeArray[i].style.top = planeArray[i].yPos + "px";
+                    context.drawImage(planeArray[i], planeArray[i].xPos, planeArray[i].yPos, 194, 170);
+                    miniOnClick(planeArray[i]);
+                }
+        
+                ghost0 += vel;
+                ghost9 += vel;
+        
+                vel -= 0.9;
+        
+                if (ghost0 + vel > 10) {
+                    vel = 10 - ghost0;
+                }
+                if (ghost0 < 10) {
+                    requestAnimationFrame(flyBack);
+                } else {
+                    vel = 0;
+                    upgradeable = true;
+                    var exists = false;
+                    for (var i = 0; i < planeArray.length; i++) {
+                        if (planeArray[i] !== null) {
+                            exists = true;
+                        }
+                    }
+        
+                    if (!exists) {
+                        flightGameOver = true;
+                        expand("planeFail");
+                        expand("planeExplain");
+                    } else if (flightNum === 8) {
+                        flightGameOver = true;
+                        expand("planeSuccess");
+                        expand("planeExplain");
+                    }
+                }
+            }
+        
+            function upgrade(part) {
+                if (!upgradeable || flightGameOver) return;
+                switch (part) {
+                    case "lwing":
+                        lWingDef++;
+                        break;
+                    case "rwing":
+                        rWingDef++;
+                        break;
+                    case "fuselage":
+                        fuselageDef++;
+                        break;
+                    case "cockpit":
+                        cockpitDef++;
+                        break;
+                    case "rear":
+                        rearDef++;
+                        break;
+                    case "rudder":
+                        rudderDef++;
+                        break;
+                    default:
+                        console.log("Definitely shouldn't run.");
+                        break;
+                }
+                upgradeable = false;
+                flying = false;
+            }
+        
+        </script>
+    </div>
+    <div>
+        <div class="content" id="planeSuccess" display="block">
+            <p>Well done! you were able to reduce the number of planes getting lost across flights with your new designs!</p>
+            <p>You might have noticed how despite providing more protection to the fuselage area, damage levels seemed to initially increase. This isn't a fault in your repairs, it's a statistical phenomenon called "survivorship bias".</p>
+            <p>The trick to this lies behind the fact that you only receive feedback from the planes which are fit to return to the hanger. While the wings and tail of most planes get damaged every flight, if we look at them from the perspective of all the planes initially snet out, we find most to all damage of those types are non-catastrophic.</p>
+            <p>If we look at the fuselage from the same perspective, we find no data on unprotected planes surviving any form of damage at all. Only when you start reinforcing the fuselage are the damaged planes able to return to the hanger. This means that the most serious of the issues is hidden as the least serious.</p>
+
+        </div>
+        <div class="content" id="planeFail" display="block">
+            <p>0 planes left</p>
+            <p>While you might have minimised certain levels of damage, you weren't able to reduce the number of planes getting lost every flight.</p>
+            <p>Perhaps counterintuitively, the part which benefits the most from reinforcements is the fuselage, despite it being the part most often left unscathed when planes return. To explain this, we look at a statistical phenomenon called "survivorship bias".</p>
+            <p>The trick to this lies behind the fact that you only receive feedback from the planes which are fit to return to the hanger. While the wings and tail of most planes get damaged every flight, if we look at them from the perspective of all the planes initially sent out, we find most to all damage of those types are non-catastrophic.</p>
+            <p>If we look at the fuselage from the same perspective, we find no data on unprotected planes surviving any form of damage at all. In fact, if we put any form of protection on the fuselage, we find that the number of planes lost drops and the number of planes returning with critical fuselage damage rises.</p>
+        </div>
+        <div class="content" id="planeExplain" display="block">
+            <p>Made famous by the work of our Abraham Wald in 1943, this fallacy shows how we can come to the wrong or opposite conclusions when only looking at the "survivors" of a sample. This point is still relevant today, from "they don't make them like they used to" mentalities in music and appliances, to idolisation of influencers and celebrities.</p>
+        </div>
+    </div>
+</div>
+
+<div id = "chart game">
+    <h2>Case 3: Double Dipping in the Sample Pool</h2>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <div>
+        <p>This last example uses a bit more critical thinking. Imagine one day you come across an article on a brand new health trend, with stunning results in sample groups adolescents, adults and elderly</p>
+    </div>
+    <script>
+        let xy1Values = [];
+        let xy2Values = [];
+        let xy3Values = [];
+        let xTotalValues = [];
+        let yTotalValues = [];  
+
+        while (xy1Values.length < 100) {
+            let y = Math.random() * 4 - 2;
+            let x = Math.random() * 40 - 20;
+
+            if ((x / 20) ** 2 + (y / 2) ** 2 <= 1) {
+                y += 0.9 * x
+
+                y += 10;
+                x += 60;
+                
+                let temp = {x: x, y: y}
+                xy1Values.push(temp);
+                xTotalValues.push(x);
+                yTotalValues.push(y);
+            }
+        }
+
+        while (xy2Values.length < 100) {
+            let y = Math.random() * 4 - 2;
+            let x = Math.random() * 40 - 20;
+
+            if ((x / 20) ** 2 + (y / 2) ** 2 <= 1) {
+                y += 1 * x
+
+                y += 50;
+                x += 20;
+                
+                let temp = {x: x, y: y}
+                xy2Values.push(temp);
+                xTotalValues.push(x);
+                yTotalValues.push(y);
+            }
+        }
+
+        while (xy3Values.length < 100) {
+            let y = Math.random() * 4 - 2;
+            let x = Math.random() * 40 - 20;
+
+            if ((x / 20) ** 2 + (y / 2) ** 2 <= 1) {
+                y += 1.1 * x
+
+                y += 30;
+                x += 40;
+                
+                let temp = {x: x, y: y}
+                xy3Values.push(temp);
+                xTotalValues.push(x);
+                yTotalValues.push(y);
+            }
+        }
+        </script>
+        <h3>Figure 1: Trend of response in adolescents</h3>
+        <canvas id="myChart1" style="max-width: 50vw;max-height: 50vh"></canvas>
+        <script>
+            var myChart1 = new Chart("myChart1", {
+        type: "scatter",
+        data: {
+            datasets: [{
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(0,0,255)",
+            data: xy1Values
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            xAxes: [{ticks: {min: 50, max:80}}],
+            yAxes: [{ticks: {min: 0, max:30}}],
+            }
+        }
+        })
+        </script>
+
+        <h3>Figure 2: Trend of response in adults</h3>
+        <canvas id="myChart2" style="max-width: 50vw;max-height: 50vh"></canvas>
+        <script>
+            var myChart2 = new Chart("myChart2", {
+        type: "scatter",
+        data: {
+            datasets: [{
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(0,255,0)",
+            data: xy2Values
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            xAxes: [{ticks: {min: 0, max:40}}],
+            yAxes: [{ticks: {min: 30, max:70}}],
+            }
+        }
+        })
+        </script>
+
+        <h3>Figure 3: Trend of response in the elderly</h3>
+        <canvas id="myChart3" style="max-width: 50vw;max-height: 50vh"></canvas>
+        <script>
+            var myChart3 = new Chart("myChart3", {
+        type: "scatter",
+        data: {
+            datasets: [{
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(255,0,0)",
+            data: xy3Values
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            xAxes: [{ticks: {min: 20, max:60}}],
+            yAxes: [{ticks: {min: 10, max:50}}],
+            }
+        }
+        })
+        </script>
+
+        <br>
+        <p>Then on the next day, right before you head to the shops to start your brand new healthy lifestyle, you come across a study claiming that the fad had a negative trends across the entire age range.</p>
+        <p>Which report would you trust?</p>
+
+        <div style="width:100%;height:80px;">
+            <div style="background-color:#f92525;width:140px;height:40px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="changeColour(this)" onmouseout="resetColour(this)" onclick="expand('chartTime')">The First</div>
+            <div style="background-color:#f92525;width:140px;height:40px;padding-top:15px;color:#ffffff;font-weight:bold;font-size:18px;float:left;text-align:center;"onmouseover="changeColour(this)" onmouseout="resetColour(this)" onclick="expand('chartTime')">The Second</div>
+        </div>
+
+        <div class="content" id="chartTime">
+        <br>
+        <p>Looking further into the study, you notice its authors are the same as those cited in the first article. Sure enough, you find that the survey is the exact same.</p>
+        <p>Confused? Then do I have a paradox for you!</p>
+        <p>Named after Edward Hugh Simpson, Simpson's Paradox occurs when a trend common to every group of data disappears or even reverses when looking at the entire dataset. As you can see in the chart below, the trick is each group being separated from each other in a specific way.</p>
+        <canvas id="myChartBig" style="width:100%"></canvas>
+        <script>
+        var temp = findLineByLeastSquares(xTotalValues, yTotalValues);
+        var xyPredicted = []
+        for (var i = 0; i < temp[0].length; i++) {
+            var memejj = {};
+            memejj.x = temp[0][i];
+            memejj.y = temp[1][i];
+            xyPredicted.push(memejj);
+        }
+        
+        var myChartBig = new Chart("myChartBig", {
+        type: "scatter",
+        data: {
+            datasets: [{
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(0,0,255)",
+            data: xy1Values
+            },{
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(0,255,0)",
+            data: xy2Values 
+            }, {
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(255,0,0)",
+            data: xy3Values   
+            }, {
+            pointRadius: 4,
+            pointBackgroundColor: "rgb(0,0,0)",
+            data: xyPredicted
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            xAxes: [{ticks: {min: 0, max:100}}],
+            yAxes: [{ticks: {min: 0, max:80}}],
+            }
+        }
+        })
+
+        // function from https://dracoblue.net/dev/linear-least-squares-in-javascript/
+        function findLineByLeastSquares(values_x, values_y) {
+            var sum_x = 0;
+            var sum_y = 0;
+            var sum_xy = 0;
+            var sum_xx = 0;
+            var count = 0;
+
+            /*
+            * We'll use those variables for faster read/write access.
+            */
+            var x = 0;
+            var y = 0;
+            var values_length = values_x.length;
+
+            if (values_length != values_y.length) {
+                throw new Error('The parameters values_x and values_y need to have same size!');
+            }
+
+            /*
+            * Nothing to do.
+            */
+            if (values_length === 0) {
+                return [ [], [] ];
+            }
+
+            /*
+            * Calculate the sum for each of the parts necessary.
+            */
+            for (var v = 0; v < values_length; v++) {
+                x = values_x[v];
+                y = values_y[v];
+                sum_x += x;
+                sum_y += y;
+                sum_xx += x*x;
+                sum_xy += x*y;
+                count++;
+            }
+
+            /*
+            * Calculate m and b for the formular:
+            * y = x * m + b
+            */
+            var m = (count*sum_xy - sum_x*sum_y) / (count*sum_xx - sum_x*sum_x);
+            var b = (sum_y/count) - (m*sum_x)/count;
+
+            /*
+            * We will make the x and y result line now
+            */
+            var result_values_x = [];
+            var result_values_y = [];
+
+            for (var x = 0; x < 600; x+= 0.1) {
+                y = x * m + b;
+                result_values_x.push(x);
+                result_values_y.push(y);
+            }
+
+            return [result_values_x, result_values_y];
+        }
+        </script>
+        <p>The direction of the split between the groups is perpendicular to the common trend, meaning that the only possibility for the line of best fit is to go in the opposite direction.</p> 
+        <p>This split of course is unlikely to be natural, potentially stemming from external factors such as researcher bias, or health history in age demographics in the case of our health fad example. Most importantly, it requires knowledge that pure statistics might not provide.</p>
+        <p>No matter how well we follow the numbers, some things can't be placed into statistics.</p>
+
+    </div>
+</div>
+</article>
+</body>
+</html>
